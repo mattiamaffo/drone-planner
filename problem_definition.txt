@@ -1,0 +1,81 @@
+**Problema: Pianificazione di una missione di droni per monitoraggio ambientale**
+
+Un ente governativo di monitoraggio ambientale deve effettuare una missione per raccogliere dati atmosferici in una regione divisa in **16 aree di interesse**. Questa regione è rappresentata da una griglia di 4x4, con coordinate che vanno da `(0,0)` (in alto a sinistra) a `(3,3)` (in basso a destra). L’obiettivo è raccogliere informazioni su **tre parametri ambientali critici**: temperatura, umidità e livelli di inquinamento. Ogni drone della flotta ha capacità specifiche e possiede un solo tipo di sensore, il che richiede che i droni collaborino per completare il monitoraggio.
+
+Ogni drone parte da una stazione base. Le stazioni sono situate nei punti `(0,0)` e `(3,3)` della griglia. La missione presenta una serie di sfide operative: i droni hanno una **autonomia limitata** di 15 unità di energia, consumata per ogni movimento. Inoltre, devono tornare a una stazione base per ricaricarsi quando l’energia è insufficiente per completare il percorso pianificato. Il tempo di ricarica è proporzionale all'energia da ripristinare, quindi è fondamentale ottimizzare i percorsi per minimizzare il numero di ricariche e il tempo totale della missione.
+
+Oltre ai vincoli legati all’autonomia, devono essere evitate collisioni: due droni non possono trovarsi nello stesso punto nello stesso momento. Inoltre, alcune aree potrebbero essere temporaneamente inaccessibili a causa di condizioni meteorologiche avverse, che verranno indicate come vincoli statici o dinamici nel problema. 
+
+Ogni drone è equipaggiato con un **sensore specifico**:
+- **Drone1:** Sensore per la temperatura.
+- **Drone2:** Sensore per l’umidità.
+- **Drone3:** Sensore per i livelli di inquinamento.
+
+Per monitorare completamente un'area, devono essere raccolti dati di **tutti e tre i tipi**. Questo implica che, in alcuni casi, più droni dovranno visitare la stessa area, ma non contemporaneamente, per completare la raccolta dati. La missione è considerata completata solo quando tutte le aree sono state monitorate per ciascun tipo di dato.
+
+---
+
+**Dettagli aggiuntivi del problema**
+1. **Obiettivo principale:** 
+   - Completare il monitoraggio dell’intera regione nel **minor tempo possibile**, ottimizzando i percorsi, le ricariche e il coordinamento tra i droni.
+
+2. **Autonomia e gestione dell'energia:** 
+   - Ogni movimento consuma 1 unità di energia.
+   - Le ricariche possono essere effettuate solo presso le stazioni base in `(0,0)` e `(3,3)`. Ogni unità di energia ripristinata richiede 1 minuto.
+
+3. **Tipi di dati da raccogliere:**
+   - Ogni area richiede i dati di temperatura, umidità e inquinamento.
+   - Ogni drone può raccogliere solo il dato per il quale è equipaggiato.
+
+4. **Collaborazione tra droni:**
+   - I droni devono collaborare per completare il monitoraggio, coordinando i movimenti per ridurre sovrapposizioni inutili.
+
+5. **Vincoli geografici e ambientali:**
+   - Alcune aree potrebbero essere bloccate, il che richiede ai droni di adattare i loro percorsi.
+   - Esistono due stazioni base per la ricarica: una nel punto iniziale `(0,0)` e una opposta in `(3,3)`.
+
+---
+
+**Nuovi vincoli**
+1. **Collaborazione obbligatoria:** 
+   - Nessun drone può completare la missione da solo. Le aree devono essere visitate da droni diversi per raccogliere tutti i dati richiesti.
+2. **Ottimizzazione energetica:** 
+   - Pianificare i percorsi in modo che ogni drone completi la propria parte della missione utilizzando al meglio la propria energia.
+3. **Ricarica intelligente:** 
+   - Minimizzare le visite alle stazioni di ricarica, evitando ricariche non necessarie.
+4. **Gestione di ostacoli:** 
+   - Alcune aree possono diventare inaccessibili durante la missione. Il piano deve essere robusto e adattarsi a questi vincoli.
+
+---
+
+**Definizione dei sensori nel problema**
+1. **Predicati PDDL:**
+   - `HasSensor(drone, tipo_sensore)`: Definisce che un drone possiede un certo sensore.
+   - `DataCollected(area, tipo_sensore)`: Indica che un tipo di dato è stato raccolto in un’area.
+2. **Esempio iniziale:**
+   - `(HasSensor(Drone1, temperatura))`
+   - `(HasSensor(Drone2, umidita))`
+   - `(HasSensor(Drone3, inquinamento))`
+
+---
+
+**Strategie per minimizzare i tempi di ricarica**
+1. **Ottimizzazione dei percorsi:**
+   - Pianificare movimenti che sfruttano al massimo l’autonomia disponibile, ritornando alla stazione base solo quando strettamente necessario.
+   - Utilizzare euristiche per calcolare percorsi che minimizzano il consumo energetico.
+
+2. **Euristiche suggerite:**
+   - **FF Heuristic:** Per calcolare velocemente un piano efficace basato sul completamento dell’obiettivo.
+   - **Relaxed Plan Graph Heuristic:** Per stimare in modo approssimato il costo totale.
+
+3. **Definizione della ricarica:**
+   - Azione `Recharge(drone)` incrementa l’energia del drone, ma richiede che il drone sia in una stazione base (`AtStation(drone, station)`).
+
+---
+
+**Output atteso**
+1. **Piani generati dal planner PDDL:**
+   - Un piano che include i movimenti dei droni, la raccolta dei dati e le ricariche, ottimizzato per completare la missione nel minor tempo possibile.
+2. **Reasoning tramite Situation Calculus:**
+   - Analisi delle condizioni per completare la missione.
+   - Predizione degli effetti di percorsi alternativi.
