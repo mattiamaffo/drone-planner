@@ -1,0 +1,96 @@
+Ecco gli strumenti e software necessari per il **Membro 1**, responsabile dello sviluppo del dominio e dei problemi PDDL:
+
+---
+
+### **1. Editor PDDL**
+- **Scopo**: Scrivere e testare il dominio e i problemi PDDL.
+- **Opzioni consigliate**:
+  1. **Visual Studio Code**:
+     - Con estensione **PDDL** di Janusz Jankowski:
+       - Fornisce evidenziazione della sintassi, verifica degli errori e integrazione con planner.
+       - Link: [VS Code PDDL Extension](https://marketplace.visualstudio.com/items?itemName=jan-dolejsi.pddl)
+  2. **Sublime Text**:
+     - Con supporto PDDL tramite plugin.
+  3. **Atom**:
+     - Estensione per PDDL disponibile.
+
+---
+
+### **2. Planner PDDL**
+- **Scopo**: Eseguire e testare i piani generati dal dominio e dai problemi.
+- **Opzioni consigliate**:
+  1. **Fast Downward**:
+     - Uno dei planner più potenti e versatili.
+     - Supporta diverse euristiche, come **FF Heuristic** e **Relaxed Plan Graph**.
+     - Link: [Fast Downward](https://www.fast-downward.org/)
+  2. **Metric-FF**:
+     - Ideale per problemi con vincoli metrici (es. energia e tempo).
+     - Link: [Metric-FF](http://fai.cs.uni-saarland.de/hoffmann/metric-ff.html)
+  3. **OPTIC**:
+     - Specifico per problemi temporali.
+     - Link: [OPTIC Planner](https://nms.kcl.ac.uk/planning/software/optic.html)
+
+---
+
+### **3. Simulatori e visualizzatori**
+- **Scopo**: Visualizzare e validare i piani generati dai planner.
+- **Strumenti utili**:
+  1. **PDDL Editor Online**:
+     - Semplice ambiente online per scrivere e testare PDDL.
+     - Link: [PDDL Editor Online](https://editor.planning.domains/)
+  2. **Plan Visualizer**:
+     - Trasforma i piani in diagrammi o rappresentazioni grafiche.
+     - Integrazione con planner come Fast Downward.
+
+---
+
+### **4. Ambiente di sviluppo**
+- **Sistema operativo**:
+  - Linux o Windows con **WSL** (Windows Subsystem for Linux).
+  - Linux è preferibile perché molti planner sono progettati per ambienti Unix.
+- **Strumenti di supporto**:
+  1. **Python** (opzionale):
+     - Utile per pre-processare i problemi o analizzare i risultati.
+     - Ad esempio, per generare automaticamente problemi PDDL da input dinamici.
+  2. **Git**:
+     - Per il versionamento del dominio e dei problemi.
+     - Collaborazione con il membro 2 su una piattaforma come GitHub o GitLab.
+
+---
+
+### **5. Documentazione e tutorial**
+- **Guida a PDDL**:
+  - Tutorial base: [PDDL Guide](https://planning.wiki/)
+  - Esempi pratici: [PDDL Examples](https://editor.planning.domains/)
+- **Manuale Fast Downward**:
+  - Include dettagli su come eseguire e configurare il planner.
+  - Link: [Fast Downward Documentation](https://www.fast-downward.org/Documentation)
+
+---
+
+### **6. Diagrammi e pianificazione**
+- **Scopo**: Pianificare la struttura del dominio e visualizzare problemi complessi.
+- **Software consigliati**:
+  1. **Draw.io** o **Lucidchart**:
+     - Per creare diagrammi che mostrano i predicati, le azioni e i flussi logici.
+  2. **Figma** (opzionale):
+     - Per creare rappresentazioni grafiche avanzate dei piani.
+
+---
+
+### **7. Test e Convalida**
+- **Simulazione di piani**:
+  - Dopo aver scritto i problemi, testali per verificarne la correttezza.
+  - Usa Fast Downward o un editor online per simulare i piani.
+
+---
+
+### **Configurazione minima consigliata**
+1. **Editor PDDL**:
+   - Installa VS Code con estensione PDDL.
+2. **Planner**:
+   - Configura Fast Downward (preferibilmente su Linux o WSL).
+3. **Version Control**:
+   - Usa Git per tracciare i file PDDL e collaborare con il membro 2.
+4. **Testing**:
+   - Assicurati che il dominio e i problemi siano testati in un planner locale o online.
