@@ -24,11 +24,7 @@
     (PriorityMedium ?a - area) ;; Indica se l'area ha priorita' media
     (PriorityLow ?a - area) ;; Indica se l'area ha priorita' bassa
 
-    (SatelliteDataAvailable ?a - area)
-    (RequestedSatelliteData ?a - area)
-
     ;; Operational constraints
-    (Blocked ?from - area ?to - area)
     (DynamicBlocked ?from - area ?to - area)
     (Adj ?from - area ?to - area)
   )
@@ -40,7 +36,6 @@
     :precondition (and
       (At ?d ?from)
       (Adj ?from ?to)
-      (not (Blocked ?from ?to))
       (not (DynamicBlocked ?from ?to))
       (not (LastAt ?d ?to))
       (HasEnergyHigh ?d) ;; Manca questa precondizione
@@ -58,7 +53,6 @@
     :precondition (and
       (At ?d ?from)
       (Adj ?from ?to)
-      (not (Blocked ?from ?to))
       (not (DynamicBlocked ?from ?to))
       (not (LastAt ?d ?to))
       (HasEnergyLow ?d) ;; Solo se il drone ha energia bassa
@@ -97,28 +91,34 @@
     )
   )
 
-  ;; Action: Request satellite data
-  (:action RequestSatelliteData
-    :parameters (?d - drone ?a - area)
-    :precondition (and
-      (At ?d ?a)
-      (SatelliteDataAvailable ?a)
-      (not (RequestedSatelliteData ?a))
-    )
-    :effect (RequestedSatelliteData ?a)
-  )
-
   ;; Action: Move support drone directly to the drone in need
   (:action MoveSupportDrone
     :parameters (?support - support-drone ?to - area)
     :precondition (and
       (exists
         (?receiver - drone)
-        (and (At ?receiver ?to) (HasEnergyLow ?receiver))) ;; Si muove solo se un drone ha energia bassa
+        (and (At ?receiver ?to) (HasEnergyLow ?receiver)))
     )
     :effect (and
       (not (At ?support ?from))
       (At ?support ?to)
+    )
+  )
+
+  ;; Action: Clear a blocked dynamic path
+  (:action ClearPath
+    :parameters (?d - drone ?a - area ?s - sensor ?from - area ?to - area)
+    :precondition (and
+      (At ?d ?a) ;; Il drone deve essere nell'area dove raccoglie i dati
+      (DataCollected ?a ?s) ;; I dati devono essere già stati raccolti
+      (HasSensor ?d ?s) ;; Il drone deve avere il sensore giusto
+      (DynamicBlocked ?from ?to) ;; Il percorso deve essere bloccato
+      (or (HasEnergyHigh ?d) (HasEnergyLow ?d)) ;; Il drone deve avere energia
+    )
+    :effect (and
+      (not (DynamicBlocked ?from ?to)) ;; Il passaggio viene sbloccato
+      (not (DynamicBlocked ?to ?from)) ;; Il passaggio viene sbloccato anche in direzione opposta
+      (not (HasEnergyLow ?d)) ;; Dopo aver liberato il passaggio, il drone è scarico
     )
   )
 )

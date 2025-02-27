@@ -1,4 +1,4 @@
-(define (problem drone_mission_2)
+(define (problem drone_mission_3)
   (:domain drone_mission)
 
   ;; Objects in the problem
@@ -11,14 +11,17 @@
 
   ;; Initial state
   (:init
-    ;; Drone initial positions
-    (At drone1 area3)
-    (At drone2 area9)
+    ;; **Drone initial positions**
+    (At drone1 area1)
+    (At drone2 area3)
     (At drone_support area5)
+
+    ;; **Energia iniziale**
     (HasEnergyHigh drone1)
     (HasEnergyHigh drone2)
     (HasEnergyHigh drone_support)
 
+    ;; **Adiacenze**
     (Adj area1 area2)
     (Adj area2 area3)
     (Adj area4 area5)
@@ -32,7 +35,7 @@
     (Adj area5 area8)
     (Adj area6 area9)
 
-    ;; Bidirectional adjacencies
+    ;; **Bidirezionali**
     (Adj area2 area1)
     (Adj area3 area2)
     (Adj area5 area4)
@@ -46,25 +49,34 @@
     (Adj area8 area5)
     (Adj area9 area6)
 
-    ;; Sensor capabilities
+    ;; **Blocked Paths**
+    (DynamicBlocked area3 area6)
+    (DynamicBlocked area6 area3)
+    (DynamicBlocked area9 area6)
+    (DynamicBlocked area6 area9)
+
+    ;; **Sensor capabilities**
     (HasSensor drone1 temp)
     (HasSensor drone2 hum)
 
-    ;; Priority levels
+    ;; **Priority levels**
     (PriorityHigh area1)
-    (PriorityHigh area2)
-    (PriorityMedium area3)
+    (PriorityMedium area2)
+    (PriorityHigh area6)
+    (PriorityLow area8)
   )
 
-  ;; Goals
+  ;; **Goals**
   (:goal
     (and
       (DataCollected area1 temp)
       (DataCollected area1 hum)
       (DataCollected area2 temp)
       (DataCollected area2 hum)
-      (DataCollected area3 temp)
-      (DataCollected area3 hum)
+      (DataCollected area6 temp)
+      (DataCollected area6 hum)
+      (DataCollected area8 temp)
+      (DataCollected area8 hum)
     )
   )
 )
