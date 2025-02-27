@@ -1,0 +1,40 @@
+### **Descrizione del Problema – Drone Mission (Scenario Intermedio)**  
+
+#### **📌 Contesto**  
+Questo problema riguarda una missione in cui **tre droni autonomi** collaborano per raccogliere dati atmosferici in un'area suddivisa in **16 zone** (griglia 4x4).  
+- **Drone1** è equipaggiato con un sensore per la **temperatura**.  
+- **Drone2** è equipaggiato con un sensore per l'**umidità**.  
+- **Drone_Support** è un **drone di servizio** che non raccoglie dati, ma ha **energia extra** per ricaricare gli altri droni.  
+
+L'obiettivo è raccogliere dati da **tre aree di interesse (area1, area2, area3)**, rispettando vincoli di **energia e priorità**.
+
+---
+
+#### **📌 Obiettivo della Missione**
+I droni devono raccogliere **dati atmosferici** in **tre aree critiche**:
+1. **Area1** (Priorità 1) – Devono essere raccolti dati di temperatura e umidità.  
+2. **Area2** (Priorità 1) – Devono essere raccolti dati di temperatura e umidità.  
+3. **Area3** (Priorità 2) – Deve essere raccolto lo stesso set di dati.  
+
+🔹 **Il piano migliore minimizza il costo totale (`total-cost`)**, che potrebbe includere il numero di azioni, il consumo energetico o la distanza percorsa.
+
+---
+
+#### **📌 Vincoli e Regole della Missione**
+1️⃣ **Droni con energia limitata**  
+   - Drone1 e Drone2 iniziano con **10 unità di energia**, quindi **non possono completare la missione senza supporto**.  
+   - Drone_Support ha **50 unità di energia**, usate per ricaricare gli altri droni.  
+
+2️⃣ **Drone di supporto per la ricarica**  
+   - Il drone di supporto **può ricaricare** Drone1 e Drone2 se si trovano nella stessa area.  
+   - Ogni ricarica costa energia al drone di supporto e aumenta l'energia del drone che riceve il supporto.  
+
+3️⃣ **Mappa della missione (Griglia 4x4)**  
+   - Le aree sono connesse tra loro in modo **bidirezionale**, quindi i droni possono muoversi in tutte le direzioni **seguendo le adiacenze definite**.  
+   - Alcune aree potrebbero essere più difficili da raggiungere e potrebbero richiedere più energia.  
+
+4️⃣ **Ordine di priorità per la raccolta dati**  
+   - **Le aree con priorità più alta devono essere raggiunte prima** se possibile.  
+   - Area1 e Area2 hanno **priorità 1**, quindi i droni dovrebbero raccogliere dati lì prima di passare all’Area3, che ha **priorità 2**.
+
+---

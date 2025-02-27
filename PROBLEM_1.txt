@@ -1,0 +1,29 @@
+Descrizione del Problema
+
+Il problema definito riguarda una missione di droni per la raccolta di dati atmosferici in una griglia 4x4 di aree. È un caso di difficoltà base, senza gestione avanzata di blocchi dinamici o consumi energetici complessi. Il compito è assegnato a due droni, ciascuno con un sensore diverso:
+
+Drone 1 - Equipaggiato con un sensore per la temperatura.
+Drone 2 - Equipaggiato con un sensore per l'umidità.
+
+Obiettivo della missione
+L’obiettivo è raccogliere dati da due aree specifiche (area1 e area2) per entrambi i parametri (temperatura e umidità). Ciò significa che ogni area deve essere visitata da entrambi i droni per completare la raccolta dati.
+
+Struttura della Griglia e Adiacenze
+La griglia è modellata come una matrice 4x4, dove ogni area ha connessioni con le sue aree adiacenti (orizzontalmente e verticalmente). Questo permette ai droni di muoversi tra le aree nel rispetto delle regole di navigazione.
+
+Specifiche del problema
+
+Inizializzazione dei droni:
+
+Drone1 parte da area3
+Drone2 parte da area13
+Entrambi i droni iniziano con un livello di energia fissato a 10 unità (non influenzato in questa versione semplificata).
+Stazioni di ricarica:
+Stazione1 è situata in area1
+Stazione2 è situata in area16
+
+Priorità delle aree:
+Area1 e area2 hanno priorità 1, indicando che sono più importanti da monitorare.
+
+Adiacenze:
+Definite tra tutte le aree per garantire la connettività della griglia.

@@ -1,0 +1,28 @@
+**Descrizione del problema - Missione dei droni**
+
+In questa missione, tre droni (**drone1, drone2 e drone_support**) devono raccogliere dati ambientali da specifiche aree utilizzando sensori.
+Ogni drone ha una posizione iniziale e un livello di energia definito, con **drone_support** che funge da unità di ricarica per gli altri droni.
+
+### **Scenario iniziale**
+- **drone1** parte da **area1** con **7 unità di energia** e può raccogliere dati sulla **temperatura (temp)**.
+- **drone2** parte da **area3** con **10 unità di energia** e può raccogliere dati sull'**umidità (hum)**.
+- **drone_support** parte da **area5** con **50 unità di energia** e può ricaricare gli altri droni.
+- Alcune aree sono **occupate** (area1 e area3), il che potrebbe limitarne l'accesso immediato.
+- Alcuni percorsi sono **bloccati dinamicamente** e dovranno essere sbloccati dai droni per consentire il movimento (es. area3⇔area6 e area9⇔area6).
+
+### **Obiettivo**
+I droni devono raccogliere dati da **quattro aree critiche**:
+- **area1**: temp e hum
+- **area2**: temp e hum
+- **area6**: temp e hum (area di priorità alta, più difficile da raggiungere)
+- **area8**: temp e hum
+
+### **Vincoli e difficoltà**
+- **Energia limitata**: Ogni drone consuma energia per muoversi e raccogliere dati.
+- **Blocchi dinamici**: Alcuni percorsi sono bloccati e devono essere liberati prima di poter proseguire.
+- **Ricarica necessaria**: I droni devono pianificare con attenzione l’uso dell'energia e, se necessario, ricaricarsi da **drone_support**.
+- **Priorità delle aree**: Alcune aree sono più importanti di altre e potrebbero costare più energia per la raccolta dati.
+
+### **Ottimizzazione**
+Il piano ottimale cerca di **minimizzare il costo totale (total-cost)**, che rappresenta l'energia spesa e il numero di azioni necessarie per completare la missione.
+
