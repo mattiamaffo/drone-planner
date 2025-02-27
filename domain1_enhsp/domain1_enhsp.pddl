@@ -5,7 +5,7 @@
 
   ;; Define types
   (:types
-    drone area station sensor - object
+    drone area sensor - object
   )
 
   ;; Predicates
@@ -17,13 +17,10 @@
 
     ;; Area state
     (DataCollected ?a - area ?s - sensor)
-    (SatelliteDataAvailable ?a - area) ; If satellite data is available
-    (RequestedSatelliteData ?a - area) ; If satellite data was requested
     (Occupied ?p - area) ; Indicates if an area is occupied by a drone
 
     ;; Operational constraints
-    (Blocked ?from - area ?to - area) ; Indicates a blocked path
-    (DynamicBlocked ?from - area ?to - area) ; Path blocked due to weather
+    (DynamicBlocked ?from - area ?to - area) ; Indicates a blocked path
     (Adj ?from - area ?to - area) ; Indicates adjacency
   )
 
@@ -40,7 +37,6 @@
     :precondition (and
       (At ?d ?from)
       (Adj ?from ?to)
-      (not (Blocked ?from ?to))
       (not (DynamicBlocked ?from ?to))
       (not (Occupied ?to))
       (not (LastAt ?d ?to)) ;; Evita il ritorno immediato
@@ -87,14 +83,21 @@
     )
   )
 
-  ;; Action: Request satellite data
-  (:action RequestSatelliteData
-    :parameters (?d - drone ?a - area)
+  ;; Action: Clear a blocked dynamic path
+  (:action ClearPath
+    :parameters (?d - drone ?a - area ?s - sensor ?from - area ?to - area)
     :precondition (and
-      (At ?d ?a)
-      (SatelliteDataAvailable ?a)
-      (not (RequestedSatelliteData ?a))
+      (At ?d ?a) ;; Il drone deve essere nell'area dove raccoglie i dati
+      (DataCollected ?a ?s) ;; I dati devono essere già stati raccolti
+      (HasSensor ?d ?s) ;; Il drone deve avere il sensore giusto
+      (DynamicBlocked ?from ?to) ;; Il percorso deve essere bloccato
+      (> (EnergyLevel ?d) 2) ;; Il drone deve avere abbastanza energia per sbloccare il passaggio
     )
-    :effect (and (RequestedSatelliteData ?a) (increase (total-cost) 1))
+    :effect (and
+      (not (DynamicBlocked ?from ?to)) ;; Il passaggio viene sbloccato
+      (not (DynamicBlocked ?to ?from)) ;; Il passaggio viene sbloccato anche in direzione opposta
+      (decrease (EnergyLevel ?d) 2) ;; Il drone consuma energia per sbloccare
+      (increase (total-cost) 1) ;; Il costo totale aumenta
+    )
   )
 )
