@@ -55,16 +55,37 @@ prim_action(right(D)).
 poss(right(D), and(drone(D), and(neg(has_charge(D) = 0), neg(pos_x(D) = W)))) :- height(W).
 
 
-initially(pos_x(d1), 0).
+initially(pos_x(d1), 3).
+initially(pos_y(d1), 0).
 initially(has_charge(d1), MAX) :- max_charge(MAX).
 
 proc(go_to_X(D, X),
     while(neg(pos_x(D) = X),
-        ndet(right(D), left(D))
+        if(pos_x(D) < X, right(D), left(D))
     )
 ) :- drone(D).
 
-proc(control(dumb),
-   go_to_X(d1, 2) ).
+proc(go_to_Y(D, Y),  
+    while(neg(pos_y(D) = Y),  
+        if(pos_y(D) < Y, up(D), down(D))  
+    )  
+) :- drone(D).
+
+proc(go_to(D, X, Y),  
+    while(or(neg(pos_x(D) = X), neg(pos_y(D) = Y)),
+        [
+            %if(neg(pos_x(D) = X), go_to_X(D, X), ndet(up(D), down(D))),
+            go_to_X(D, X),
+            %if(neg(pos_y(D) = Y), go_to_Y(D, Y), _)
+            go_to_Y(D, Y)
+        ]
+    )
+) :- drone(D).
+
+proc(control(go_to_X),
+   go_to_X(d1, 1) ).
+
+proc(control(go_to),
+    go_to(d1, 2, 2) ).
 
 proc(go_to_Y, [up(d1)]).
