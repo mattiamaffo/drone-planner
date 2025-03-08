@@ -86,8 +86,8 @@ proc(request_support_drone(SD, D, X, Y),
 
 proc(go_to(D, X, Y),  
     while(or(neg(pos_x(D) = X), neg(pos_y(D) = Y)), [
-        ndet(go_to_X(D, X), request_support_drone(d3, d1, pos_x(d1), pos_y(d1))),
-        ndet(go_to_Y(D, Y), request_support_drone(d3, d1, pos_x(d1), pos_y(d1)))
+        ndet(go_to_X(D, X), request_support_drone(d3, D, pos_x(D), pos_y(D))),
+        ndet(go_to_Y(D, Y), request_support_drone(d3, D, pos_x(D), pos_y(D)))
     ])
 ) :- drone(D).
 
