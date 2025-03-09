@@ -118,12 +118,6 @@ proc(actions, [
     )
 ]) :- reward(X, Y).
 
-proc(search_actions, [
-        star(actions),
-        ?(picked_up)
-    ]
-).
-
 proc(solved, picked_up).
 
 % controllers
@@ -133,4 +127,7 @@ proc(control(basic), [
     pick_up(d1, X, Y)
 ]) :- reward(X, Y).
 
-proc(control(search_actions), search(search_actions)).
+proc(control(search_actions), search([
+    star(actions),
+    ?(picked_up)
+])).
