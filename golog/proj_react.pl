@@ -21,6 +21,8 @@ drone(d2).
 
 supp_drone(d3).
 
+reward(3, 2).
+
 % fluents
 
 fun_fluent(pos_x(D)) :- drone(D) ; supp_drone(D).
@@ -37,6 +39,9 @@ causes_val(up(D), has_charge(D), N, N is has_charge(D)-1).
 causes_val(down(D), has_charge(D), N, N is has_charge(D)-1).
 causes_val(left(D), has_charge(D), N, N is has_charge(D)-1).
 causes_val(right(D), has_charge(D), N, N is has_charge(D)-1).
+
+rel_fluent(picked_up).
+causes_true(pick_up(d1, X, Y), picked_up, true).
 
 % actions
 
@@ -55,12 +60,23 @@ poss(right(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(
 prim_action(charge(SD, D)).
 poss(charge(SD, D), and(drone(D), and(supp_drone(SD), and(pos_x(D) = pos_x(SD), pos_y(D) = pos_y(SD))))).
 
+prim_action(pick_up(D, X, Y)).
+poss(pick_up(D, X, Y), and(drone(D), and(pos_x(D) = X, pos_y(D) = Y))).
+
+% initial conditions
+
 initially(pos_x(d1), 3).
 initially(pos_y(d1), 0).
 initially(pos_x(d3), 0).
 initially(pos_y(d3), 0).
 initially(has_charge(d1), MAX) :- max_charge(MAX).
 initially(has_charge(d3), 1000).
+initially(picked_up, false).
+
+initially(reward_f(1, 2), true).
+initially(reward_f(2, 2), true).
+
+% procedures
 
 proc(go_to_X(D, X),
     if(pos_x(D) < X, right(D), left(D))
@@ -72,13 +88,8 @@ proc(go_to_Y(D, Y),
 
 proc(request_support_drone(SD, D, X, Y),
     [
-    %[go_to(SD, X, Y), charge(SD, D)]
         while(or(neg(pos_x(SD) = X), neg(pos_y(SD) = Y)), [
-            if(neg(pos_x(SD) = X), 
-                go_to_X(SD, X),
-                
-                go_to_Y(SD, Y)
-            )
+            if(neg(pos_x(SD) = X), go_to_X(SD, X), go_to_Y(SD, Y))
         ]),
         charge(SD, D)
     ]
@@ -91,10 +102,35 @@ proc(go_to(D, X, Y),
     ])
 ) :- drone(D).
 
-proc(control(go_to_X),
-   go_to_X(d1, 1) ).
+proc(actions, [
+    ndet(
+        ndet(
+            ndet(up(d1), down(d1)),
+            ndet(left(d1), right(d1))
+        ),
+        ndet(
+            ndet(
+                ndet(up(d3), down(d3)),
+                ndet(left(d3), right(d3))
+            ),
+            ndet(charge(d3, d1), pick_up(d1, X, Y))
+        )
+    )
+]) :- reward(X, Y).
 
-proc(control(go_to),
-    go_to(d1, 2, 2) ).
+proc(search_actions, [
+        star(actions),
+        ?(picked_up)
+    ]
+).
 
-proc(control(gtc), go_to_and_charge(d3,d1,2, 3)).
+proc(solved, picked_up).
+
+% controllers
+
+proc(control(basic), [
+    go_to(d1, X, Y),
+    pick_up(d1, X, Y)
+]) :- reward(X, Y).
+
+proc(control(search_actions), search(search_actions)).
