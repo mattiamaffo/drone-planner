@@ -9,9 +9,12 @@
 % There is nothing to do caching on (required becase cache/1 is static)
 cache(_) :- fail.
 
+% Translations of domain actions to real actions (one-to-one)
+actionNum(X, X).
+
 % predicates
 
-max_charge(2).
+max_charge(4).
 
 width(3).
 height(3).
@@ -21,7 +24,7 @@ drone(d2).
 
 supp_drone(d3).
 
-reward(3, 2).
+reward(3, 3).
 
 % fluents
 
@@ -43,25 +46,48 @@ causes_val(right(D), has_charge(D), N, N is has_charge(D)-1).
 rel_fluent(picked_up).
 causes_true(pick_up(d1, X, Y), picked_up, true).
 
+rel_fluent(raining(X, Y)).
+causes_true(start_raining(X, Y), raining(X, Y), true).
+causes_false(stop_raining(X, Y), raining(X, Y), true). 
+initially(raining(0, 3), false). initially(raining(1, 3), false). initially(raining(2, 3), false).  initially(raining(3, 3), false).
+initially(raining(0, 2), false). initially(raining(1, 2), false). initially(raining(2, 2), false).  initially(raining(3, 2), false).
+initially(raining(0, 1), false). initially(raining(1, 1), false). initially(raining(2, 1), false).  initially(raining(3, 1), false).
+initially(raining(0, 0), false). initially(raining(1, 0), false). initially(raining(2, 0), false).  initially(raining(3, 0), false).
+
+rel_fluent(exog_action_received).
+causes_true(start_raining(X, Y), exog_action_received, true).
+causes_true(stop_raining(X, Y), exog_action_received, true).
+
 % actions
 
 prim_action(down(D)).
-poss(down(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_y(D) = 0)))).
+poss(down(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), and(neg(pos_y(D) = 0), neg((raining(pos_x(D), Y1), Y1 is pos_y(D) - 1)))))).
 
 prim_action(up(D)).
-poss(up(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_y(D) = H)))) :- height(H).
+poss(up(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), and(neg(pos_y(D) = H), neg((raining(pos_x(D), Y1), Y1 is pos_y(D) + 1)))))) :- height(H).
 
 prim_action(left(D)).
-poss(left(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_x(D) = 0)))).
+poss(left(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), and(neg(pos_x(D) = 0), neg((raining(X1, pos_y(D)), X1 is pos_x(D) - 1)))))).
 
 prim_action(right(D)).
-poss(right(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_x(D) = W)))) :- height(W).
+poss(right(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), and(neg(pos_x(D) = W), neg((raining(X1, pos_y(D)), X1 is pos_x(D) + 1)))))) :- height(W).
 
 prim_action(charge(SD, D)).
 poss(charge(SD, D), and(drone(D), and(supp_drone(SD), and(pos_x(D) = pos_x(SD), pos_y(D) = pos_y(SD))))).
 
 prim_action(pick_up(D, X, Y)).
 poss(pick_up(D, X, Y), and(drone(D), and(pos_x(D) = X, pos_y(D) = Y))).
+
+% exeg actions
+
+exog_action(start_raining(X, Y)).
+poss(start_raining(X, Y), or(pos_x(d1)\=X, pos_y(d1)\=Y)).
+
+exog_action(stop_raining(X, Y)).
+poss(stop_raining(X, Y), true).
+
+prim_action(Act) :- exog_action(Act).
+%poss(Act, true) :- exog_action(Act).
 
 % initial conditions
 
@@ -108,13 +134,7 @@ proc(actions, [
             ndet(up(d1), down(d1)),
             ndet(left(d1), right(d1))
         ),
-        ndet(
-            ndet(
-                ndet(up(d3), down(d3)),
-                ndet(left(d3), right(d3))
-            ),
-            ndet(charge(d3, d1), pick_up(d1, X, Y))
-        )
+        pick_up(d1, X, Y)
     )
 ]) :- reward(X, Y).
 
@@ -131,6 +151,19 @@ proc(control(search_actions), search([
     star(actions),
     ?(picked_up)
 ])).
+
+initially(exog_action_received, false).
+proc(control(search_actions_reactive), [prioritized_interrupts([
+    interrupt(neg(picked_up), [
+        if(exog_action_received, unset(exog_action_received), []),
+        gexec(neg(exog_action_received), search([
+            star(actions),
+            ?(picked_up)
+        ]))
+    ])
+])]).
+% start_raining(3,2)
+% stop_raining(3,2)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % LEGALITY TASK
