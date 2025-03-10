@@ -8,7 +8,7 @@ With this implementation it is possible to use the controllers:
 
 And solve projection and legality tasks.
 
-To everything it is necessary to clone this repository inside the indigolog folder and run:
+To run everything it is necessary to clone this repository inside the indigolog folder and run:
 
     swipl config.pl drone-planner/indigolog/main.pl
 
