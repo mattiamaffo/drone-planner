@@ -28,9 +28,7 @@
 % CONSULT APPLICATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-:- [proj_react].
-:- [legality].
-:- [projection].
+:- [task].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SPECIFY ADDRESS OF ENVIRONMENT MANAGER

@@ -131,3 +131,24 @@ proc(control(search_actions), search([
     star(actions),
     ?(picked_up)
 ])).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LEGALITY TASK
+
+% set the sequence of actions to test:
+proc(actions_legality, [up(d1), down(d1)]).
+
+legality :-
+    indigolog(actions_legality).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PROJECTION TASK
+
+% set final condition to check:
+proc(fcond, pos_x(d1)=1).
+
+% set the sequence of actions perform:
+proc(actions_seq, [left(d1)]).
+
+projection :-
+	indigolog([actions_seq, ?(fcond)]).
