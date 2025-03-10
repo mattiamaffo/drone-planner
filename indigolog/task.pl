@@ -61,7 +61,12 @@ causes_true(stop_raining(X, Y), exog_action_received, true).
 % actions
 
 prim_action(down(D)).
-poss(down(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_y(D) = 0)))).
+poss(down(D), and(
+    or(drone(D), supp_drone(D)), and(
+    neg(has_charge(D) = 0), and( 
+    neg(pos_y(D) = 0),
+    (Y1 is pos_y(D) - 1, not(raining(pos_x(D), Y1)))
+)))).
 
 prim_action(up(D)).
 poss(up(D), and(
@@ -72,10 +77,20 @@ poss(up(D), and(
 )))) :- height(H).
 
 prim_action(left(D)).
-poss(left(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_x(D) = 0)))).
+poss(left(D), and(
+    or(drone(D), supp_drone(D)), and(
+    neg(has_charge(D) = 0), and(
+    neg(pos_x(D) = 0),
+    (X1 is pos_x(D) - 1, not(raining(X1, pos_y(D))))
+)))).
 
 prim_action(right(D)).
-poss(right(D), and(or(drone(D), supp_drone(D)), and(neg(has_charge(D) = 0), neg(pos_x(D) = W)))) :- height(W).
+poss(right(D), and(
+    or(drone(D), supp_drone(D)), and(
+    neg(has_charge(D) = 0), and(
+    neg(pos_x(D) = W),
+    (X1 is pos_x(D) + 1, not(raining(X1, pos_y(D))))
+)))) :- height(W).
 
 prim_action(charge(SD, D)).
 poss(charge(SD, D), and(drone(D), and(supp_drone(SD), and(pos_x(D) = pos_x(SD), pos_y(D) = pos_y(SD))))).
@@ -157,7 +172,7 @@ proc(actions_simplified, [
         ),
         pick_up(d1, X, Y)
     )
-]).
+]) :- reward(X, Y).
 
 proc(solved, picked_up).
 
@@ -178,7 +193,7 @@ proc(control(search_actions_reactive), [prioritized_interrupts([
     interrupt(neg(picked_up), [
         if(exog_action_received, unset(exog_action_received), []),
         gexec(neg(exog_action_received), search([
-            star(actions),
+            star(actions_simplified),
             ?(picked_up)
         ]))
     ])
