@@ -1,5 +1,8 @@
 # Drone Planner
 
+![Drone-planner-GIF](drone.gif)
+
+
 ## Overview
 The **Drone Planner** project focuses on planning and coordinating autonomous drones for environmental and meteorological monitoring. The mission is inspired by NOAA's drone-based monitoring strategies and aims to optimize energy consumption while ensuring full data collection in extreme weather conditions.
 
