@@ -5,7 +5,8 @@
 
   ;; Define types
   (:types
-    drone support-drone area station sensor - object
+    support-drone - drone
+    drone area station sensor - object
   )
 
   ;; Predicates
@@ -93,15 +94,16 @@
 
   ;; Action: Move support drone directly to the drone in need
   (:action MoveSupportDrone
-    :parameters (?support - support-drone ?to - area)
+    :parameters (?support - support-drone ?from - area ?to - area)
     :precondition (and
+      (At ?support ?from) ;; Il drone deve essere da qualche parte prima di muoversi
       (exists
         (?receiver - drone)
         (and (At ?receiver ?to) (HasEnergyLow ?receiver)))
     )
     :effect (and
-      (not (At ?support ?from))
-      (At ?support ?to)
+      (not (At ?support ?from)) ;; Rimuoviamo lo stato precedente
+      (At ?support ?to) ;; Il drone si muove nella nuova area
     )
   )
 
