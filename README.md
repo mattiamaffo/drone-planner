@@ -3,7 +3,7 @@
 ## Overview
 The **Drone Planner** project focuses on planning and coordinating autonomous drones for environmental and meteorological monitoring. The mission is inspired by NOAA's drone-based monitoring strategies and aims to optimize energy consumption while ensuring full data collection in extreme weather conditions.
 
-Drones operate within a **grid-based environment** (either 4x4 or 3x3) and are equipped with specialized sensors to collect **temperature, humidity, and pollution data**. Collaboration is essential since each drone carries only one type of sensor. Additionally, a **support drone** is introduced to recharge other drones, minimizing unnecessary movements and improving mission efficiency.
+Drones operate within a **grid-based environment** (either 4x4 or 3x3) and are equipped with specialized sensors to collect **temperature and humidity**. Collaboration is essential since each drone carries only one type of sensor. Additionally, a **support drone** is introduced to recharge other drones, minimizing unnecessary movements and improving mission efficiency.
 
 The project is implemented using **PDDL** for automated planning and **Situation Calculus with Indigolog** for reasoning tasks.
 
