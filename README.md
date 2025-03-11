@@ -15,7 +15,7 @@ The mission consists of drones navigating a grid while optimizing energy use and
 
 Key features:
 - **Drones start from two base stations** and must collect data from prioritized areas.
-- **Energy constraints** require recharging at base stations or through a support drone.
+- **Energy constraints** require recharging through a support drone with (ideally) infinite energy.
 - **Dynamic obstacles** can block paths initially, requiring strategic movement adjustments.
 - **Priority areas** require more urgent data collection.
 
