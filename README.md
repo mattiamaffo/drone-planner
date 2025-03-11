@@ -1,6 +1,6 @@
 # Drone Planner
 
-![Drone-planner-GIF](drone.gif)
+![Drone-planner-GIF]((https://github.com/mattiamaffo/drone-planner/blob/1612455ad8598cb5e6e70d7596723186b3fc1f92/src/drone.gif))
 
 
 ## Overview
